@@ -1,0 +1,43 @@
+version: '3.7'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./deploy/Dockerfile
+    image: telegram_bot:${TELEGRAM_BOT:-latest}
+    restart: always
+    env_file:
+    - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+    - ./logs:/app/src/logs
+    environment:
+      REDIS_IP: redis
+  mongo:
+    image: mongo
+    hostname: geo-terra-mongo
+    restart: always
+    ports:
+    - "27117:27017"
+    volumes:
+    - ./mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+  redis:
+    image: bitnami/redis:6.2.5
+    hostname: test_fastapi-redis
+    restart: always
+    environment:
+      ALLOW_EMPTY_PASSWORD: "yes"
+    healthcheck:
+      test:
+      - CMD
+      - redis-cli
+      - ping
+      interval: 1s
+      timeout: 3s
+      retries: 30

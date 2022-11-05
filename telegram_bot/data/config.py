@@ -3,9 +3,7 @@ import os
 
 
 BOT_TOKEN = str(os.getenv("BOT_TOKEN"))
-admins = [
-    os.getenv(ADMINS)
-]
+admins = [os.getenv("ADMINS")]
 
 ip = os.getenv("ip")
 

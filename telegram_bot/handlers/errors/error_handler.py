@@ -1,6 +1,6 @@
 import logging
 
-from loader import dp
+from telegram_bot.loader import dp
 
 
 @dp.errors_handler()
